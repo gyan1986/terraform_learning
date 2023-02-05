@@ -22,10 +22,3 @@ resource "aws_subnet" "dev-subnet-1" {
   }
 }
 
-output "dev-vpc" {
-  value = aws_vpc.development-vpc.id
-}
-
-output "dev-subnet" {
-  value = aws_subnet.dev-subnet-1.id
-}
