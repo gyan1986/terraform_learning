@@ -76,8 +76,3 @@ resource "aws_security_group" "myapp-sg" {
 
 }
 
-resource "aws_instance" "my_ec2" {
-    ami = "ami-05b622b5fa0269787"
-    instance_type = "t2.micro"
-    
-}
