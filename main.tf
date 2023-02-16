@@ -82,9 +82,7 @@ resource "aws_instance" "myapp-server" {
   ami = "ami-0e742cca61fb65051"
   instance_type = var.instance_type
 
-  subnet_id = aws_subnet.dev-subnet-1.id
-  vpc_security_group_ids = [aws_security_group.myapp-sg.id] 
-  availability_zone = var.avail_zone
+    availability_zone = var.avail_zone
 
   associate_public_ip_address = true
   key_name = "terraform_key_pair"
