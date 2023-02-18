@@ -78,8 +78,7 @@ resource "aws_security_group" "myapp-sg" {
 }
 
 resource "aws_instance" "myapp-server" {
-  count = 2
-  ami = "ami-0e742cca61fb65051"
+    ami = "ami-0e742cca61fb65051"
   instance_type = var.instance_type
 
   subnet_id = aws_subnet.dev-subnet-1.id
@@ -93,4 +92,10 @@ resource "aws_instance" "myapp-server" {
     Name = "${var.env_prefix}-server"
   }
   
+}
+
+
+output "myapp-server" {
+  value = aws_instance.myapp-server.id
+
 }
