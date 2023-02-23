@@ -80,6 +80,7 @@ resource "aws_security_group" "myapp-sg" {
 resource "aws_instance" "myapp-server" {
     ami = "ami-0e742cca61fb65051"
   instance_type = var.instance_type
+  count = 2
 
   subnet_id = aws_subnet.dev-subnet-1.id
   vpc_security_group_ids = [aws_security_group.myapp-sg.id] 
