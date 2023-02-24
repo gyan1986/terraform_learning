@@ -66,6 +66,9 @@ jobs:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v3
+     # below are the block for secret key 
+    - name: Use a secret in a command
+      run: echo "${{ secrets.MY_SECRET }}"
 
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
