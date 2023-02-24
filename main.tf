@@ -1,7 +1,4 @@
-provider "aws" {
-  access_key = "${secrets.AWS_ACCESS_KEY_ID}"
-  secret_key = "${secrets.AWS_SECRET_ACCESS_KEY}"
-}
+provider "aws" {}
 
 resource "aws_vpc" "development-vpc" {
     cidr_block = "10.0.0.0/16"
