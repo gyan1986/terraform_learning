@@ -1,4 +1,8 @@
-provider "aws" {}
+provider "aws" {
+  access_key = "${secrets.AWS_ACCESS_KEY_ID}"
+  secret_key = "${secrets.AWS_SECRET_ACCESS_KEY}"
+}
+
 resource "aws_vpc" "development-vpc" {
     cidr_block = "10.0.0.0/16"
     tags = {      
@@ -34,8 +38,4 @@ resource "aws_subnet" "dev-subnet-2" {
 
 output "dev-vpc" {
   value = aws_vpc.development-vpc.id
-}
-
-output "dev-subnet-1" {
-  value = aws_subnet.dev-subnet-1.id
 }
