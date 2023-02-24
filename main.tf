@@ -1,95 +1,43 @@
-provider "aws" { }
 
-variable vpc_cidr_block {}
-variable subnet_cidr_block {}
-variable avail_zone {}
-variable env_prefix {}
-variable my_ip {}
-variable instance_type {}
+provider "aws" {}
 
-resource "aws_vpc" "myapp-vpc" {
-    cidr_block = var.vpc_cidr_block
+resource "aws_vpc" "development-vpc" {
+    cidr_block = "10.0.0.0/16"
     tags = {      
-        Name: "${var.env_prefix}-vpc"
+        Name: "development" 
+        vpc_env: "dev" 
     }
   }
   
 
 resource "aws_subnet" "dev-subnet-1" {
-  vpc_id = aws_vpc.myapp-vpc.id
-  cidr_block = var.subnet_cidr_block
-  availability_zone = var.avail_zone
+  vpc_id = aws_vpc.development-vpc.id
+  cidr_block = "10.0.10.0/24"
+  availability_zone = "ap-south-1a"
   tags = {
-    Name: "${var.env_prefix}-subnet-1"
+    Name: "development"
   }
 }
 
 
-resource "aws_internet_gateway" "myapp-igw" {
-  vpc_id = aws_vpc.myapp-vpc.id
-  tags = {
-    Name: "${var.env_prefix}-igw"
-  }
-  
+data "aws_vpc" "existing_vpc" {
+  default = true
 }
 
-resource "aws_default_route_table" "main-rtb" {
-  default_route_table_id = aws_vpc.myapp-vpc.default_route_table_id
-
-  route {
-   cidr_block =  "0.0.0.0/0"
-   gateway_id = aws_internet_gateway.myapp-igw.id
-   }
-  tags = {
-   Name: "${var.env_prefix}-main-rtb"
- }
-}
-resource "aws_security_group" "myapp-sg" {
-  name = "myapp-sg"
-  vpc_id = aws_vpc.myapp-vpc.id
-
-  ingress {
-   from_port = 22
-   to_port = 22
-   protocol = "tcp"
-   cidr_blocks = [var.my_ip]
+resource "aws_subnet" "dev-subnet-2" {
+  vpc_id = data.aws_vpc.existing_vpc.id
+  cidr_block = "172.31.48.0/20"
+  availability_zone = "ap-south-1a"
+   tags = {
+    Name: "dev-subnet-2"
   }
-
-  ingress {
-   from_port = 8080
-   to_port = 8080
-   protocol = "tcp"
-   cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-   from_port = 0
-   to_port = 0
-   protocol = "-1"
-   cidr_blocks =["0.0.0.0/0"]
-   prefix_list_ids = []
-  }
-   
-  tags = {
-   Name: "${var.env_prefix}-sg"
-
-  }
-
 }
 
-resource "aws_instance" "myapp-server" {
-    ami = "ami-0e742cca61fb65051"
-  instance_type = var.instance_type
 
-  subnet_id = aws_subnet.dev-subnet-1.id
-  vpc_security_group_ids = [aws_security_group.myapp-sg.id] 
-  availability_zone = var.avail_zone
+output "dev-vpc" {
+  value = aws_vpc.development-vpc.id
+}
 
-  associate_public_ip_address = true
-  key_name = "terraform_key_pair"
-
-  tags = {
-    Name = "${var.env_prefix}-server"
-  }
-  
+output "dev-subnet-1" {
+  value = aws_subnet.dev-subnet-1.id
 }
