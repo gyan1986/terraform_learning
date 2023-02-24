@@ -35,7 +35,3 @@ resource "aws_subnet" "dev-subnet-2" {
 output "dev-vpc" {
   value = aws_vpc.development-vpc.id
 }
-
-output "dev-subnet-1" {
-  value = aws_subnet.dev-subnet-1.id
-}
