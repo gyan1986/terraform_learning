@@ -78,6 +78,7 @@ resource "aws_security_group" "myapp-sg" {
 }
 
 resource "aws_instance" "myapp-server" {
+  count = 2
     ami = "ami-0e742cca61fb65051"
   instance_type = var.instance_type
 
@@ -89,7 +90,7 @@ resource "aws_instance" "myapp-server" {
   key_name = "terraform_key_pair"
 
   tags = {
-    Name = "${var.env_prefix}-server"
+    Name = "${var.env_prefix}-${count.index}"
   }
   
 }
